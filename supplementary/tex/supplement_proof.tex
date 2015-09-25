@@ -1,0 +1,330 @@
+\section{Structure graph - theory}
+
+The main paper provides the key ideas behind the structured modeling
+formulation. The supplementary material presents the complete
+mathematical definition, constraints, and proofs.
+% rties, and constraints of the structure
+% graph.  We will prove that meshes compiled from the structure graph in
+% various levels of details are manifolds, and show that our indoor
+% structure grammar and the associated reconstruction algorithms satisfy
+% the constraints.
+
+\subsection{Definitions}
+
+Let $v$ denote a node in a structure graph and its associated geometry
+with abuse of notation. We consider a 2D surface representation of $v$,
+where $\Gamma(v)$ denotes its boundary.
+%
+The graph has directed and undirected edges. The {\em attachment}
+edges in the main paper are ignored in this analysis, as they do not exhibit
+geometric constraints across elements (except for intersections, which
+will be discussed later).
+%Level-of-details edges are directed, while boundary edges are not.
+%
+% We use $\mathcal{E}_L$ and $\mathcal{E}_B$ to denote the
+% level-of-details and the boundary edges, respectively. $\mathcal{E}_L$
+% are directed, while $\mathcal{E}_B$ are not.
+
+\begin{wrapfigure}{r}{0.35\columnwidth}
+  \includegraphics[width=0.34\columnwidth]{../figures/graph_proof.pdf}
+ \caption{Three types of connected nodes: $V^P_1$, $V^N_j$,
+ and $V^C_k$.}
+\end{wrapfigure}
+The right figure shows that potential connections at a node are a parent
+$V^P_1$, neighbors $V^N_j$, and children $V^C_k$.
+We define
+\begin{eqnarray*}
+\Gamma(e^P_1) &=& \Gamma(v)\cap \Gamma(v^P_1), \nonumber\\
+\Gamma(e^C_k) &=& \Gamma(v)\cap \Gamma(v^C_k), \nonumber
+% \Gamma(e^N_j) &=& \Gamma(v^N_j) \cap \left[\Gamma(v) \setminus
+%                                     \Gamma(e^P_1)\right] \nonumber
+\end{eqnarray*}
+Edge $\Gamma(e^P_1)$ conveys a part of the boundary condition of $v^P_1$
+that must be satisfied by $v$ for manifold-ness. The same is true for
+$\Gamma(e^C_k)$.  The boundary associated with an edge must not be
+$\emptyset$, otherwise the edge should not be connected. $\Gamma(e^N_j)$
+conveys the surface boundary where the two incident nodes must match
+exactly for manifold-ness. Its definition is not the simple intersection
+and will be later derived from the constraint.
+%
+We use $\mathcal{P}$(arents), $\mathcal{N}$(eighbors), and
+$\mathcal{C}$(hildren) to denote a set of nodes that are connected by
+$e^P_1$, $e^N_j$, and $e^C_k$, respectively. Note that we will have a
+constraint not to allow multiple parents, and hence $P$ can have at most
+one node.
+%
+%$e^B_{ij}$ denotes a boundary connecting $n_i$ and $n_j$. $e^L_{ij}$ is
+%a directed edge from $n_i$ to $n_j$.
+%
+%$\Gamma(n_i)$ and $\Gamma(n_j)$ have an overlap, where the geometries
+%exactly match.
+
+\subsection{Constraints}
+%\end{eqnarray*}
+% Similarly, given a level-of-details edge $e^L_{ij}$ from $n_i$ to $n_j$, their
+% common surface boundary is denoted as
+% %\begin{eqnarray*}
+%  $\Gamma(e^L_{ij}) = \Gamma(n_i) \cap \Gamma(n_j).$
+% %\end{eqnarray*}
+%
+\begin{enumerate}[itemsep=0mm]
+ \item[C1:] The geometry $v$ is a single connected component.
+ \item[C2:] The geometry $\bigcup_k v^C_k$ is a single connected
+            component, if $\mathcal{C}\ne \emptyset$.
+ \item[C3:] $\Gamma(v) = \Gamma(e^P_1) \cup
+            \left[\bigcup_j \Gamma(e^N_j)\right]$ if
+            $\mathcal{P}\ne \emptyset$  or $\mathcal{N} \ne \emptyset$.\\
+  $\{\Gamma(e^P_1), \Gamma(e^N_1), \Gamma(^N_2) \cdots \}$ are mutually
+            exclusive.
+            %do not have a common boundary interval.
+ \item[C4:] $\Gamma(v) = \bigcup_k \Gamma(e^C_k)\quad $ if $\mathcal{C} \ne \emptyset.$\\
+            $\{\Gamma(e^C_1), \Gamma(e^C_2) \cdots\}$ are mutually exclusive.
+            %do not have a common boundary interval.
+ \item[C5:] The graph is acyclic with respect to the directed edges.
+ \item[C6:] A node cannot have multiple parents.
+\end{enumerate}
+
+The structure graph must satisfy these constraints.
+C2 states that the surface formed by the children must be a single connected
+component. This appears restrictive but is not.
+%In case, one needs to model multiple connected components coming out
+%from a node,
+For modeling multiple connected components from a single surface, one
+should first split the domain, then add a component to each sub-domain.
+% then add a node to each split region.
+%
+C3 states that the boundary condition of a node is satisfied by
+its neighbors and parent.
+%
+C4 states that the boundary condition of $v$ is propagated to its
+children.
+%In other words, the boundary condition is satisfied if the
+%condition is satisfied at its children.
+
+\subsection{Proofs}
+
+\begin{lemma}\label{lemma1}
+$\Gamma(e^N_j) = \Gamma(v^N_j) \cap \left[\Gamma(v) \setminus
+                                     \Gamma(e^P_1)\right]$.
+\end{lemma}
+
+\begin{proof}
+C3 guarantees no intersection between $\Gamma(e^P_1)$ and
+ $\Gamma(e^N_j)$. Therefore, the first line of C3 can be converted to
+\begin{eqnarray*}
+ \Gamma(v) \setminus \Gamma(e^P_1) = \bigcup_j \Gamma(e^N_j).
+\end{eqnarray*}
+Again \{$\Gamma(e^N_j)$\} are mutually exclusive, and
+\begin{eqnarray*}
+ \Gamma(e^N_j)\cap \left[\Gamma(v) \setminus \Gamma(e^P_1)\right] &=&  \Gamma(e^N_j)\cap
+  \left[\bigcup_j \Gamma(e^N_j)\right], \nonumber \\
+ \Gamma(e^N_j)\cap \left[\Gamma(v) \setminus \Gamma(e^P_1)\right] &=&  \Gamma(e^N_j).\nonumber
+ \end{eqnarray*}
+\end{proof}
+ 
+Lemma~\ref{lemma1} implies that only the boundary condition that has not
+been satisfied by the parent should be satisfied by the neighbors.
+
+\begin{lemma}\label{lemma2}
+The nodes in $\mathcal{C}$ form a single connected component with respect
+to the undirected edges.
+\end{lemma}
+ 
+\begin{proof}
+Suppose $\mathcal{C}$ forms multiple connected components with respect
+to the undirected edges. Due to C2, there must be a pair of nodes ($v$,
+$v^N_j$) that shares the parent, are physically connected, but are not
+connected by $e^N_j$, that is, $\Gamma(e^N_j) = \emptyset$. We use
+$\gamma$ to denote the physical surface boundary shared by these two
+nodes:
+\begin{eqnarray*}
+ \gamma = \Gamma(v^N_j) \cap \Gamma(v).
+\end{eqnarray*}
+From Lemma~\ref{lemma1}, the following holds
+\begin{eqnarray*}
+ \Gamma(v^N_j) \cap \left[\Gamma(v) \setminus
+                     \Gamma(e^P_1)\right] = \emptyset.
+\end{eqnarray*}
+Since $v$ and $v^N_j$ has a common boundary $\gamma$, $\Gamma(e^P_1)$
+ must contain $\gamma$ for the above to hold.
+ \begin{eqnarray*}
+ \gamma \subseteq \Gamma(e^P_1).
+\end{eqnarray*}
+% 
+$v$ and $v^N_j$ are interchangeable, and shares the parent. Therefore,
+this relationship is also true for another child of $v^P_1$.
+However, this violates the mutual exclusiveness in C4.
+\end{proof}
+
+Note that C2 states that $\mathcal{C}$ forms a single connected
+component in terms of its geometry. However, this does not provide a
+proof, as $\Gamma(e^N_j)$ can be $\emptyset$. Therefore, the above
+derivation completes the proof. Now, let us define that a {\it leaf
+node} does not have any out-going edge for the next lemma.
+
+\begin{lemma}\label{lemma3} 
+Given a structure graph, geometries at all the leaf nodes form a
+manifold,
+\end{lemma}
+
+\begin{proof}
+Given geometries at all the leaf nodes, we prove that the boundary
+conditions are satisfied at every node by induction. Let us first
+calculate the ``distance'' from the leaf-node as the fewest number of
+directed edges to reach any leaf. The induction is performed based on
+these distances.
+
+First, at a leaf node, a geometry is created, and C3 ensures that its
+boundary conditions are satisfied at its boundary edges $\{e^N_j\}$ and
+the in-coming edge $e^P_1$.
+%
+Second, suppose boundary conditions $\Gamma(v)$ at a node $v$ are
+satisfied where the distances are less than or equal to $k$.  Given a
+node whose distance is $k+1$, the boundary conditions at the out-going
+directed edges are satisfied, because the edges point to the nodes whose
+distances are at most $k$. C4 ensures that the entire boundary of $v$ is
+generated by its out-going edges, all of which are now satisfied.  Then, C3
+again confirms that the boundary conditions are satisfied at its
+boundary and in-coming edges further up the tree.
+%
+By induction, the boundary conditions are satisfied at every node.
+\end{proof}
+
+Our mesh compilation process generates a mesh after pruning an arbitrary
+set of nodes. This pruning operation must not leave any dangling
+boundary edges.
+
+\begin{lemma}\label{lemma4}
+The structure graph group (a set of valid structure graphs) is closed
+ under the pruning operation.
+\end{lemma}
+
+\begin{proof}
+ We will check that every constraint is satisfied after any pruning
+ operation.
+\begin{enumerate}[itemsep=0mm]
+ \item[C1:] Independent of the pruning.
+ \item[C2:] Lemma~\ref{lemma2} shows that all the children nodes must be pruned
+ ($\mathcal{C}$ becomes $\emptyset$) or stay connected ($\mathcal{C}$
+ does not change).
+ \item[C3:] It suffices to prove for a node $v$ that has not been
+            pruned. Since
+            no dangling boundary edge remains, all the neighbor nodes $v^N_j$
+            should also stay in the graph. $v^P_1$ is a parent of $v$ and not
+            pruned. Therefore, the equality stay unchanged.
+            Mutual exclusiveness is independent of the pruning.
+ \item[C4:] Due to Lemma~\ref{lemma2}, all the children nodes must stay or be
+            pruned. Therefore, either the equality does not change or
+            $\mathcal{C}$ becomes $\emptyset$.
+            Mutual exclusiveness is independent of the pruning.
+ \item[C5:] The graph loses connections by pruning, and is still acyclic.
+ \item[C6:] Pruning will not add new parents.
+\end{enumerate}
+\end{proof}
+
+\begin{theorem}
+ The structure graph produces a manifold-mesh after dropping an
+ arbitrary set of nodes, as long as no dangling boundary edges remain.
+\end{theorem}
+
+\begin{proof}
+ Lemma~\ref{lemma3} and Lemma~\ref{lemma4} prove.
+\end{proof}
+ 
+
+% The second constraint ensures that the boundary condition is propagated
+% to the children properly.
+% \begin{eqnarray*}
+%  \forall n_j \in C(n_i) \quad \forall n_k (\ne n_j) \in C(n_i), \quad
+%   \Gamma(E^L_{ij}) \cap \Gamma(E^L_{ik}) = \emptyset.
+% \end{eqnarray*}
+% $C(n_i)$ denotes a set of children nodes of $n_i$.
+%  
+% $N_B(n_i)$ denotes a set of nodes that are connected to $n_i$ by the
+% boundary edges. $N_L^I(n_i)$ (resp. $N_L^O(n_i)$) denotes a set of in-coming
+% (resp. out-going) nodes that are connected to $n_i$ by the
+% level-of-details edges.
+%
+% The first constraint
+% ensures that the boundary condition of a node is satisfied exactly by
+% the union of $N_B(n_i)$ and $N_L(n_i)$
+%
+% %
+% Let $C(n_i)$ denote a set of child nodes that are connected from $n_i$
+% by the level-of-detail edges. The boundary condition $\Gamma(n_i)$
+% must be also satisfied by the children $C(n_i)$ as a whole. Let
+%
+% The structure graph is flexible, but must satisfy the following
+% constraint at every node. The boundary condition at every node $n_i$
+% must be satisfied by its parent if exists and its boundary edges:
+%
+% $\mathcal{E_L}$ are directed edges. 
+%
+% are directed edges, while the
+% other two are undirected edges. $\mathcal{E_A}$ does not exhibit
+% geometric constraints, and is ignored in our analysis here.
+
+
+\subsection{Practical considerations}
+It is easy to verify that our indoor structure grammar satisfies C5 and
+C6. It is also easy to see that C1 and C2 can be easily checked or enforced.
+The problems are C3 and C4,
+%The structure graph requires the six constraints (C1 - C6) to be
+%satisfied during the reconstruction process. The most challenging
+% constraints are C3 and C5,
+which impose non-trivial boundary conditions.  The key observation is
+that the constraints act only on the surface boundaries. Therefore, our
+approach is to first fix the boundaries of each node to satisfy the
+constraints, then perform reconstruction algorithms subject to the given
+boundary conditions. This section shows that it is relatively
+straightforward to enforce these boundary conditions for each of the
+major geometric representations.
+
+The first scenario is the 2D offset-map reconstruction on a quad patch
+(\eg, wall detail reconstruction), where the boundary condition is at
+the boundary of the quad. We simply fix the depth values along the
+boundary, then the final 2D surface is guaranteed to match the specified
+boundary.
+
+The second case is the volumetric scalar field followed by the Marching
+Cube algorithm for the mesh generation. Given the boundary condition, we
+know that the nearby space (voxels) must be either interior of exterior,
+which can be enforced by fixing the scalar values at the corresponding
+voxels~\cite{shan2014occluding}. The same goes for the point-cloud
+reconstruction.
+
+Intersections in addition to the boundary condition can also be enforced
+in a similar manner. For an offset-map estimation algorithm, for
+example, infinite data terms can be used to avoid the reconstruction to
+go inside the interiors of the other geometries. The same goes for the
+volumetric scalar field and the point-cloud reconstruction, where the
+voxel values can be fixed inside the interiors of the other geometries.
+% a configuration with intersections with
+% other geometries.  The surface extraction step from the voxels can
+% similarly use hard constraints to avoid self-intersections. For example,
+% assigning the infinite penalty for a voxel to become scene exterior, if
+% it sits inside an existing geometry.
+In our experiments, we do not enforce the intersection check in the
+reconstruction algorithms, as self-intersections are rare in
+practice. Furthermore, even if there exist, they do not pose problems to
+any of our applications.
+
+
+
+%either, as the point-clouds suffice or are better for the main
+%visualization applications. and geometry suffers.
+
+
+
+%talk about the fact that objects are points, and we did not pay
+%attention to meshing much.
+
+Lastly, point-clouds are not converted to meshes for objects in our
+experiments for two reasons. First, point-clouds suffice for the
+visualization applications. Second, proper meshing of complex objects in
+the indoor scenes is a challenging problem by itself with very active
+on-going research. Note that our framework allows one to use any object
+reconstruction algorithm, even different algorithms for different
+object types, and we can easily exploit any other object reconstruction
+algorithm as a component.
+

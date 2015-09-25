@@ -1,0 +1,132 @@
+\section{Application Details}
+
+This section presents the details of our applications demonstrated in
+the main paper and the supplementary video.
+
+\subsection{Floorplan generation}
+
+Figures~\ref{fig:room_recog} and \ref{fig:room_recog1} illustrate the
+results of the room annotation experiments. The room annotation did not
+work well with the full panorama images, and we render $400\times 300$
+standard perspective images with the horizontal field of view of $90$
+degrees. The results heavily depend on the choice of the viewing
+directions and we experimented the four algorithms in an increasing
+order of accuracy. The first algorithm picks the panorama closest to the
+room center, generates six uniformly overlapping images, and picks the
+scene type with the best average score. The second one exploits more
+scene information, and uses only one image out of six, in which the
+visible room area is the maximum in the top-down view. The third
+algorithm uses the second algorithm for all the panoramas inside the
+room, and uses the average to pick the best score. The last algorithm
+takes the same set of images as the third one, but only uses a single
+image, in which the room is the most visible. Surprisingly, this last
+algorithm works the best on all the datasets. An observation is that
+poorly positioned panoramas tend to yield incorrect results but with
+very high confidence. A rather better strategy is to use the best
+viewing direction from the best panorama.
+
+
+  
+Figure~\ref{fig:object_recog} shows the object annotation results, which
+turn out to be much more challenging than the room annotations, even
+with the state-of-the-art object
+detectors~\cite{berkeley_object_detection_software}. Our object
+annotation has the following three steps. First, object detector is
+applied to each panorama image, where two images are generated from each
+panorama by shifting the left image boundary by half the image width to
+avoid having objects across the image boundary. Object detection results
+are simply merged for each panorama. Second, the structure graph is
+rasterized into each panorama with a depth testing, while keeping track
+of the structural element ID. Lastly, starting from the object detection
+with the highest detection score, we identify the object element that
+has the most rasterized pixels inside the bounding-box of the object
+detection. The process repeats after removing the matched object
+detection and the element. We only keep the annotations that are related
+to furniture in the indoor scenes (\ie, chair, lamp, table, desk, sofa,
+and bookshelf).
+
+%Room annotations are obtained by the state-of-the-art scene recognition
+%system~\cite{mit_scene_demo_paper}. Based on the reconstructed 3D
+%models, we generate standard perspective images from panoramas. The
+%details of this experiment are given in
+%Sect.~\ref{section:supple:results} in this supplementary material.
+
+
+We change the rendering style and shape of object icons depending on the
+object recognition results. For example, we have a special icon for
+desk, sofa, chair, and a lamp, respectively. The chair and the sofa have
+orientations, and we simply orient the icon so that the front side
+becomes the closest to the center of the room. Ideally, an image
+information should be used to determine the orientations of the
+icons. The outlines of the desk and the remaining (unannotated) objects
+are computed from the segmented 3D point clouds. After projecting the 3D
+points on the X-Y plane, a 2D version of the Marching
+Cube~\cite{MarchingCube} algorithm is used to extract the polygon,
+followed by a mesh simplification algorithm.
+
+% \hang{icon generation} To show objects in floorplan, we need to get the
+% 2D shape of objects from top-down view. For each object, we first
+% project all points to x-y plane to get a 2D density map. Notice that to
+% suppress noise on the object boundaries and get rectangular contours, we
+% remove a 5\% margin of confidence map on each side of x and y direction,
+% respectively. Then we perform marching square algorithm on the density
+% map to get a 2D contour, followed by simplification to reduce vertices
+% number and suppress noise. This 2D polygon is then fed into
+% triangulation algorithm and transformed to manhattan coordinate system
+% and finally rendered in floorplan view.
+
+\subsection{Indoor scene viewer}
+
+Our indoor scene viewer enables seamless visualization across
+ground-to-air view-points under various rendering styles. There are a
+few important implementation details to be shared.
+
+First, the texture map for the architectural components are computed for
+each piecewise planar surface in a single structural element
+independently. This is a major advantage enabled by our structure
+graph. Due to severe occlusions, we need to inpaint very large texture
+holes extensively, and likely misuse wall texture for the floor geometry
+with standard techniques, for example. Thanks to the compact mesh
+models, piecewise planar surfaces are very large in general, and we
+essentially compute the texture for each structural element one by
+one. Our approach benefits from both the texture synthesis and the
+texture inpainting literature. More concretely, after discretizing the
+piecewise planar surface into 2D array of texels, we first project
+nearby images to the surface with the depth testing. Due to occlusions,
+the projected textures have many holes. Starting from the projected
+texture with the least hole pixels, we assign a color to each texel, and
+repeat for all the projected textures. We then use a classical texture
+synthesis algorithm~\cite{efros1999texture} to synthesize texture for
+the hole pixels, while fixing the colors of the non-hole
+pixels. Poisson-blending~\cite{perez2003poisson} is finally used to
+smooth our texture edges. Note that we also tried an off-the-shelf
+texture inpainting tool on PhotoShop (\ie, content-aware fill) to fill
+holes, but their produced results were very poor.
+
+Second, the structure graph enables us to render back-facing structures
+effectively. First, we can simply ignore ceiling elements, which is not
+easy for a polygon-soup mesh model. As shown in
+Figs.~\ref{fig:comp_mesh0} and \ref{fig:comp_mesh1},
+simple back-face culling leaves numerous small triangle pieces in the
+views. In general, our system can render back-facing structural element
+as opaque, culled, or translucent. Note that this rendering style is
+enforced at the level of structural elements (\eg., a wall), as opposed
+to triangles, yielding effective visualize effects without artifacts.
+
+Lastly, the viewer enables a quick room-to-room ground-based
+navigation. We compute a path connecting the camera center locations by
+a simple shortest path algorithm with the visibility testing in real time.
+
+% \subsection{Inverse-CAD}
+
+\subsection{Tunable reconstruction}
+
+A user specifies the maximum number of polygons allowed for an entire
+scene, a room, or a wall. Each number simply puts a constraint at the
+corresponding node in a structure graph. Our pruning algorithm is simple
+and greedy. Starting from the bottom of the tree, we identify either a
+wall, a room, or a scene node that violates this constraint. Then, we
+find the set of nodes that can be dropped below the node and has the
+fewest number of polygons. We drop the nodes and repeat the process
+until all the constraints are satisfied. In the worse case, when the
+numbers are tight, the system might drop entire rooms.

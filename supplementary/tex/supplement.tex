@@ -1,0 +1,116 @@
+%#BIBTEX /usr/texbin/bibtex main
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{iccv}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{nccmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{tabularx}
+\usepackage{comment}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+%\usepackage{algpseudocode}
+
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+ 
+\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+
+\newcommand{\Tref}[1]{Table~\ref{#1}}
+\newcommand{\Eref}[1]{Eq.~(\ref{#1})}
+\newcommand{\Fref}[1]{Fig.~\ref{#1}}
+\newcommand{\Sref}[1]{Section~\ref{#1}}
+\newcommand{\Aref}[1]{Algorithm~\ref{#1}}
+\newcommand{\argmax}{\mathop{\rm arg~max}\limits}
+\newcommand{\argmin}{\mathop{\rm arg~min}\limits}
+
+\newcommand{\mysubsubsection}[1]{\vspace{0.1cm} \noindent \underline{{\bf #1}}:}
+\newcommand{\mysubsubsubsection}[1]{\vspace{0.1cm} \noindent {\bf #1}:}
+\newcommand{\ikehata}[1]{\textcolor{blue}{ikehata:{#1}}}
+\newcommand{\yasu}[1]{\textcolor{magenta}{[yasu: {#1}]}}
+\newcommand{\hang}[1]{\textcolor{cyan}{[hang: {#1}]}}
+%\newcommand{\ikehata}[1]{}
+%\newcommand{\yasu}[1]{}
+%\newcommand{\hang}[1]{}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[pagebackref=true,breaklinks=true,letterpaper=true,colorlinks,bookmarks=false]{hyperref}
+
+ \iccvfinalcopy % *** Uncomment this line for the final submission
+
+\def\iccvPaperID{745} % *** Enter the ICCV Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+\ifx\pdfoptionalwaysusepdfpagebox\relax\else
+\pdfoptionalwaysusepdfpagebox5
+\fi
+
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+\ificcvfinal\pagestyle{empty}\fi
+\begin{document}
+
+
+%%%%%%%% TITLE
+\title{Structured Indoor Modeling\\Supplementary Material}
+\author{Paper ID 745}
+\maketitle
+%\thispagestyle{empty}
+%
+
+%\section*{Contents}
+The document provides additional experimental results, algorithmic
+details, and theorem proofs, which were not included in the main paper
+due to the space limitation.
+%\yasu{I don't know why I cannot move the first figures to the first
+%page..}
+
+% This appendix provides details about the noise removal of the input
+% point cloud, and the detailed implementation of the indoor structure
+% grammer and our extensive application that have been omitted due to the
+% space limit.
+
+\input{supplement_results}
+
+\input{supplement_proof}
+
+\input{supplement_grammar}
+
+\input{supplement_algorithm}
+
+\input{supplement_applications}
+
+
+
+
+
+% Note that we do not prevent intersections with geometries at the other
+% nodes in this step, although it is not difficult to do so (infinite data
+% cost for prohibited depth values). Our observation is that the
+% topological consistency is crucial for high-end graphics or InverseCAD
+% applications. However, a small amount of mesh self-intersections did not
+% cause problems in our applications as demonstrated in
+% Sect.~\ref{section:applications}
+
+
+
+%\clearpage
+{\small
+	\bibliographystyle{ieee}
+	\bibliography{egbib,furukawa}
+}
+\end{document}
