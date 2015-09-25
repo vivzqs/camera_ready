@@ -1,0 +1,62 @@
+\section{Limitations and Future Directions}
+
+This paper presents a novel structured model representation and
+reconstruction algorithm.
+%, which is driven by the structure grammar defining the structural
+%relationships of scene elements.
+We admit that our current system has limitations. First, the most
+problematic step is the connection classification. Our current approach
+relies only on local geometric information, and tends to under-segment.
+% Our classification rule is fairly complex and a future work is to
+A future work is to exploit images to robustify the classification
+process. Scene and object recognition accuracies are also poor at many
+places, where building-scale context from the structure graph may
+help. For example, a bedroom is unlikely to be in the middle of offices.
+%structured scene representation at the scale of an entire building, much
+%bigger than a single image and a panorama.
+%structural regularities and patterns are persistent abundant in the same building.
+%Our structured model representation provides much bigger context in a
+%building scale, which has a potential to further boost the
+%performance.
+%%For example, in the same building,
+%chairs and tables tend to have the same shape, and
+%%windows tend to have the same shape and be at the same height.
+%(for object detection).
+% It is unlikely to see a bedroom in the middle of conference
+%rooms (for scene recognition).
+Another future work is to test our framework on RGBD stream datasets as
+opposed to panorama RGBD images. Although the camera pose quality tends
+to degrade for RGBD streams, our framework should be applicable.
+% We have chosen to work on the latter for several reasons. First, the
+% camera pose quality tends to degrade for RGBD streams, especially for
+% challenging scenes.  Second, the panorama experience is becoming an
+% industry standard for scene visualization~\cite{google-maps,matterport},
+% which is not easy to achieve from RGBD streams.
+% %the lack of an ability to turn around exposes significant drawbacks in
+% %real applications.
+
+The datasets and the source code will be shared with the research
+community. We believe that this paper opens up a number of new research
+directions.
+% and facilitates novel industrial applications.
+
+\mysubsubsubsection{Structured X modeling}
+Structured modeling is a general framework, and should be applicable to
+outdoor scenes or man-made objects.
+%Structured modeling framework should be applicable outside the
+%indoor scenes. Structured outdoor modeling or structured object modeling
+%is an interesting space to also explore.
+%
+
+\mysubsubsubsection{Indoor Inverse Procedural Modeling}
+Structure grammar is manually constructed in our experiments, where an
+interesting alternative is to learn the grammar from examples.
+
+\mysubsubsubsection{Inverse-CAD and Scan2BIM} Inverse-CAD has been a
+long-standing research milestone in Computer Vision, Computer Graphics,
+and Civil Engineering.  For major architectural components, our models
+already enable practical human post-processing. This research could
+serve as a good stepping stone to tackle an even harder Scan2BIM
+problem.
+
+\yasu{a bit strange finish}

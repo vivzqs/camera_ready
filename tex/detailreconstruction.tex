@@ -1,0 +1,61 @@
+\section{Manhattan-World Geometry Reconstruction}
+Our structured indoor scene representation uniquely exports the geometry of an entire scene without violoating the rule of manifold-ness, \ie, the geometry of the wall and ceiling elements could be represented by a plane in a 3-D space whose boundary is smoothly connected to the other elements. While those simplified geometry is helpfu for visualization especially with the texture mapping, however we also observe that there are many structures that are functionally inportant for the indoor modeling (e.g., window on the wall or spatially varying ceiling height). In this section, we reconstruct those {\it details} as childen of the walls and ceilings elements.
+
+The main idea is, we recover the $2$-d off-set map of the {\it Manhattan-World geometry} instead of reconstructing the geometry in the 3-d space. We define the {\it Manhattan-World geometry} as planar structures that satisfy that (a) their surface normals are one of Manhattan-World directions, (b) they are attached to its parent element (e.g., details on the wall, details on the ceil). The reason why we rely on the off-set map is mainly two-fold. First, even with any complex structures, the manifold-ness of the resultant meshes from an entire structured model can be easily preserved. Second, the representation of the off-set map, \ie, the matrix, is quite convinent for being optimized with the constraint that enforces the Manhattan-World-ness of resultant structures.
+
+The challenge of reconstructing the Manhattan-World geometry is how to remove the non-Manhattan object that is very close to the element (e.g., the chair in front of the wall), or how can we interpolate the missing region that is caused by the sensor missing pixels and those objects.
+
+For tackling this challenge, we propose the combinatrial optimization strategy by minimizing the rank and the simplizity of the geometry as much as possible.
+
+The reconstruction pipline is three-step, (a) defining the local bounding box on the 3-D voxel grid from the parent element, (b) intiialize the off-set map using the free-space/point evidences, (c) reconstruct the Manhattan-World geometry using the intial off-set map.
+
+\noindent\textbf{Local bounding box extraction}
+
+We firstly define the space of interest that is encoded in the off-set map.  Practically, we compute the bounding box that is parallel to the Manhattan directions whose inbound and outbound range from the parent's dominant plane is $\epsilon$. An off-set map is then defined as a depth map whose viewpoint is at the inbound boundary of the box and viewing direction is outgoing.
+
+\noindent\textbf{Initializing the off-set map}
+Once the space of interest and the viewpoint of the off-set map are defined, then we initialize the off-set map using free-space evidence and point-evidence. Intuititatively speaking, we cast a ray from the viewpoint to the outgoing direction that is perpendicular to the wall, and then find the outmost intersection to the surface. More strictly speaking, we construct the cost volume whose size is same with the bounding box. 
+
+On the local coordinate system whose $x-y$ plane is on the element plane and the direction of $z$-axis is outgoing direction from the room center, we compute the cost as,
+\begin{equation}
+Cost(p,l) = -E^P(p,l)\left(\sum_{k=0}^{l} E^F(p,l)\right), \label{eq:costdetail}
+\end{equation}
+where $p$ is the index of a pixel on $x-y$ coordinate and $l \in L$ is the candidate label. \Eref{eq:costdetail} quantifies the observation that when there is a gap between the outbound geometry and frontal object, there should be the freespace-evidence. However, the input point cloud is often sparse near the wall and it happens that the ray from the viewpoint does not intersect with any points (\ie, the cost for any off-set values is zero). For tackling this issue, we simply propagate the information from the neighborhood pixels by solving the MRF-optimization problem as
+\begin{equation}
+D_0 = \argmin_{\textbf{l}}{\sum_{p}Cost(p,l) + \lambda \sum_p{\sum_{q\in N(p)}}{Potts(l_p, l_q)}},
+\end{equation}
+where $Potts$ is the potts penalty that gives zero if two labels are same and otherwise one and $D_0$ is the resultant depth map. Since the label space is descrete (\ie, the number of the candidate label is the depth of the bounding box), we solve this formulation by the Graphcuts algorithm.\\
+
+\noindent\textbf{Reconstructing the Manhattan-World geometry}
+
+The number of unique values of the initial off-set map ($D_0$) is generally very large, which results in complex surface meshes.  As well as it potentially increases the data size, the over-divided surface meshes give quite low-quality texture-mapped model. Furthermore, since we rely on the free-space/point evidence information, the off-set map is corrupted by non-Manhattan objects that contacts the wall/ceil. Assuming that the optimal off-set map only contains the Manhattan-World geometry, we model the correct off-set map ($D$) as
+\begin{equation}
+D = D_0 + E, \label{formulation}
+\end{equation}
+where $E$ is an error matrix. In this paper, we assume that only a small fraction of the pixels are corrupted by large errors, and hence, E is a sparse matrix.
+
+Our goal is to recover $D$ and $E$ that meet our condition. Since this problem is highly disambiguous, we put the two constraints. First, we quantify the reasonable observation that most Manhattan-World geometry on an off-set map is reprsented by a low-rank matrix. For instance, typcial off-set map which has a rectangular on the middle (\ie, window) could be represented by a rank-$2$ matrix. Furthermore, we also want the number of values appeared in ($D$) is minimized and the boundary of the Manhattan-World geometry is sharp since we only want to reconstruct the significant structure in the scene.
+
+For consdering those conditions, we aim to solve the following problem:
+\begin{align}
+\min_{D, E}{\|E\|_0 +\mu_1{\rm rank}(D) + \mu_2 \|\nabla D\|_0 + \mu_3 Label(D) }\nonumber \\
+s.t.\;\;D = D_0 + E,\label{eq:original}
+\end{align}
+where, where $\|\|$ denotes the $\ell_0$ norm (number of non-zero entries in the matrix) and $Label$ is the label cost which is equivalent to the number of unique values in the matrix. It is prohibitedly difficult to exactly solve~\Eref{eq:original} since the all of rank function, $\ell_0$ norm and $Label$ function are highly nonconvex and discontinuous. 
+
+Fortunately, the recent breakthroughs in convex optimization~\cite{Candes2011} have shown that the first two terms can be replaced by the combination of the nuclear norm and $\ell_1$-norm minimization problems, and the label cost could be minimized when the label space is finite and discrete~\cite{Delong2012}. As a result, the optimization problems become as follow,
+{\small
+\begin{fleqn}
+\begin{align}
+D^{(0)} &= D_0, \nonumber\\
+S^{(n+1)} &= \argmin_{S}{|S-D^{(n)}| + \mu_1\|S\|_*}, \label{eq:rpca}\\
+D^{(n+1)} &= \argmin_{D} \sum_{p}\|D(p)-S^{(n+1)}(p)\|^2_2 \nonumber\\
+&+ \mu_2 \sum_p{\sum_{q\in N(p)}}{Potts(D(p), D(q))}+\mu_3\sum_{l\in \mathcal{L}}\delta_L(l).\label{eq:labelcost}
+\end{align}
+\end{fleqn}
+}
+Here~\Eref{eq:rpca} is well-known robust princple component analysis (RPCA)~\cite{Candes2011} where there already exists multiple solvers (\eg, augmenter Lagrangean algorithm) and~\Eref{eq:labelcost} is a combination of uncapacitated facility location (UFL) problem and metric labeling problems that Delong~\etal have recently proposed the efficient solver~\cite{Delong2012}. We should not that the $\ell_0$-norm of the gradient of $D$ in~\Eref{eq:original} is replaced by a simple Potts cost in~\Eref{eq:labelcost}. We iterate~\Eref{eq:rpca} and~\Eref{eq:labelcost} a few times until the off-set map ($D$) converges (usually two iterations are enough).
+
+We should note that the Manhattan geometry reconsturction algorithm is completely same with any elements (\ie, walls, ceilings). Once we an off-set is reconstructed, it is storages as a children ($\textbf{WD}, \textbf{CD}$) of the parent node ($\textbf{W}, \textbf{C}$).
+\section{Mesh Generation}
+Once structured model of an indoor scene is completely reconstructed, we can convert it to the surface mashes as we want. Since the connection of elements on the graph is completely clear, it is very straighforward to preserve the manifold-ness of the geometry as long as we care about the boundary condition of neighboring elements (\eg, wall-wall, wall-ceil). The detailed implementation of the mesh generation is included in the supplementary. 

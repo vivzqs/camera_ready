@@ -1,0 +1,51 @@
+\mysubsubsection{Object reconstruction}
+The rule takes a room, whose shape has been reconstructed, that is, a
+room node with out-going directed edges (pre-condition), then segments
+the remaining unexplained 3D points, and generates object nodes
+(transformation). Note that a point-cloud is used as the geometric
+representation, as the scene visualization is the key application and a
+point-based rendering is suitable for incomplete objects rather than a
+mesh.
+%Object-scale scene understanding and reconstruction has been actively
+%studied in the past, where one can simply replace the reconstruction
+%algorithm in our framework.
+
+\yasu{given also details}
+Given a room node and its extruded 3D model, we first collect 3D points
+that are inside the room but not too close to the existing
+geometry with a margin of 0.1 times the room height.
+% More concretely, we discretize the 3D room space by a voxel grid, so
+% that the maximum dimension spans $64$ voxels.  A voxel is marked as $1$,
+% if it intersects with the room geometry. After dilating the values in
+%the voxel grid twice,
+%by a few iterations (2 in our experiments),
+A variant of a standard point cloud segmentation algorithm
+PCL~\cite{PCL} is used to segment the point-clouds. For better rendering
+effects, we remove small objects that contain less than 1000 points, as
+well as floating objects whose minimum Z-coordinate is above the room
+center.
+
+%where the minor modifications are provided in the supplementary
+%material.
+
+% %Further refinements for segmented objects are necessary to get good
+% %rendering effect. First,
+% we remove small noisy objects which contain
+% less than 1000 points, as well as floating objects whose minimum z
+% coordinate is greater than half of the room height.
+
+% \mysubsubsection{Room merging} The rule takes two reconstructed room
+% nodes if the room connection classifier (explained in detail below)
+% identifies the connection type to be ``open'' (pre-condition),  the
+% grammar simply removes the two rom nodes, and replace it with a single
+% room node (transformation).
+
+% \mysubsubsection{Door addition} The rule takes two wall nodes if the
+% room connection classifier identifies the connection type to be ``door''
+% (pre-condition). The rule generates a new wall node with a hole at the
+% doorway, and adds these two new nodes with a door node in the
+% middle. The location of the doorways are also given by the
+% classifier. Since the wall node is a simple quad, the geometries of
+% these new nodes can be obtained easily.
+
+

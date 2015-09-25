@@ -1,0 +1,103 @@
+\section{Related Work}
+This paper touches many topics in diverse fields from Computer
+Vision, Computer Graphics and Robotics.
+% general 3D reconstruction (Computer Vision), architectural scene
+% modeling (Computer Vision and Computer Graphics), image segmentation and
+% recognition (Computer Vision), and submodular optimization (Machine
+% Learning).x
+We here limit the discussion to closely related topics.
+
+\mysubsubsection{Small-scale indoor modeling} Indoor scene modeling has
+been active in Computer Vision, where a room layout and/or object
+placements are inferred from an
+image~\cite{Hedau2009,fouhey2013data}, an RGBD
+image~\cite{Hoiem13,cornel_indoor_13}. Data driven
+approaches with 3D model databases yield CAD-quality
+reconstructions~\cite{cad_matching_12,search_classify_12}. However, the
+focus of these methods is so far on a clutter analysis in a small scale
+such as a single room.
+% , their focus
+% is mainly on analysis of the room structure in a small scale rather than
+% complete geometry reconstruction of multiple rooms.
+%
+Semantic reconstruction (SR) from an RGBD stream has been also active in
+Robotics and Computer
+Vision~\cite{jia20133d,herbst2014toward}. These
+methods handle slightly larger scenes, but are still not at the scale of
+an entire scene with multiple rooms. Also, SR merely assigns semantics
+to the pre-reconstructed 3D models. Segmentation, recognition, and
+reconstruction are unified into a single formulation in
+\cite{hane2013joint}, but their operating range is also small, as the
+entire scene is modeled as a voxel grid.
+
+\mysubsubsection{Large-scale indoor modeling}
+Recent developments in the sensor technologies enable us to capture
+dense 3D points in a large scale.
+%In the domain of construction and civil engineering, automated
+%acquisition of semantically rich building information models (BIMs) is a
+%focus of interest. They analyze building-scale LiDAR models.
+However, when it comes to the construction of a real 3D model (e.g., a
+mesh), existing methods only produce a set of planar patches at a room
+scale~\cite{xiong2013automatic}, simple geometric
+primitives for a part of a scene~\cite{mani_progress_monitoring}, a
+dense mesh staright from a voxel grid~\cite{Turner2015}, an extruded
+model from a floorplan~\cite{Turner2015}, or a ``polygon soup'' without
+any structure or semantics~\cite{eccv_museum}.
+%
+%
+For large scenes, room segmentation is also an important problem. The
+current state-of-the-art methods solve in a top-down 2D
+domain~\cite{Turner2015,Mura2014}. Room boundaries are often ambiguous in
+a top-down view, and our approach explicitly classifies room connection
+types with full 3D information to solve the problem.
+
+
+\mysubsubsection{Architectural shape priors}
+%Geometric regularities, such as planarity and orthogonality, have been
+%used for man-made scenes.
+Primitive detection is combined with Markov Random Field (MRF) to
+reconstruct piecewise planar depthmaps~\cite{ManhattanWorldStereo}.
+Detected 3D primitives can be assembled directly in the 3D
+space~\cite{eccv_museum}.  However, excessive number of
+primitives need to be extracted not to miss a single important one, and
+the primitive detecion often becomes the most problematic step. Instead,
+we combine MRF with Robust Principal Component Analysis
+(RPCA)~\cite{Candes2011} to enforce both the low-entropy and the low-rank
+structure in the depthmap to obtain much more compact 3D
+models without relying on the primitives.
+
+% which is exacerbated by the curse of dimensionality, where only very
+% simple primitive types can be used.
+%
+%Primitive generation has been combined with a popular bottom-up
+%formulation, Markov Random Field (MRF) for
+%robustness~\cite{MRF_middlebury,MRF_evaluation_2013}.
+%
+%  For example, in a case of a depthmap estimation,
+% one of the extracted primitives, instead of a discretized depth value,
+% is assigned to each pixel
+
+% These methods enforce geometric regularities fairly well, but the models
+% are still a ``polygon soup'' without any structure or semantic
+% information~\cite{ManhattanWorldStereo,GallupPlanar10,SinhaPlane09,lukas2008ffa}. They
+% also lack in the ability to effectively control the model complexities.
+
+%\mysubsubsection{Structured reconstruction} A seminal work by Dick et
+%al.~\cite{Cipolla_MCMC} employs Markov Chain Monte Carlo (MCMC) to reconstruct
+%structured outdoor building models. 2.5D facade
+%models are reconstructed from images by following a shape
+%grammar~\cite{ProceduralFacade}.
+%% When it comes to building facades, which exhibit strong structural patterns,
+%% 2.5D facade models are reconstructed from images by following shape
+%% grammars
+%The detection and parsing, although not necessarily the reconstruction,
+%of outdoor buildings were demonstrated from LiDAR point clouds by
+%applying a simple grammar~\cite{toshev2010detecting}. However, all these
+%methods handle outdoor scenes, which are usually much simpler.
+%and free from clutter.
+%We have produced a recent breakthrough in indoor 3D modeling, where
+%constructive solid geometry (CSG) is used to reconstruct large museum
+%interior models~\cite{eccv_museum}.
+% including Met museum in NYC, one of the
+% largest art galleries in the world.
+

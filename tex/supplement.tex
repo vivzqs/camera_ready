@@ -1,0 +1,66 @@
+\section{remaining grammar }
+\section{missing algorithmic details}
+
+recognition results. panorama images -> annotation for several examples
+
+        
+annotation results should be fully shown.
+
+        
+Object annotations are obtained in the following three steps. First,
+object detector is applied to each panorama image, where two images are
+generated from each panorama by shifting the left image boundary by half
+the image width to avoid having objects across the image
+boundary. Object detection results are simply merged for each
+panorama. Second, the structure graph is rasterized into each panorama
+with a depth testing, while keeping track of the structural element
+ID. Lastly, starting from the object detection with the highest
+detection score, we identify the object element that has the most
+rasterized pixels inside the bounding-box of the object detection. The
+process repeats after removing the matched object detection and the element.
+
+The room annotation did not work well with the full panorama images, and
+we render $400\times 300$ standard perspective images with the
+horizontal field of view of $90$ degrees. The results heavily depend on
+the choice of the viewing directions and we experimented the four
+algorithms in an increasing order of accuracy as shown in
+Table~\ref{table:scene}. The first algorithm picks the panorama closest
+to the room center, generates six uniformly overlapping images, and
+picks the scene type with the best average score. The second one
+exploits more scene information, and uses only one image out of six, in
+which the visible room area is the maximum in the top-down view. The
+third algorithm uses the second algorithm for all the panoramas inside
+the room, and uses the average to pick the best score. The last
+algorithm takes the same set of images as the third one, but only uses a
+single image, in which the room is the most visible. Surprisingly, this
+last algorithm works the best on all the datasets. An observation is
+that poorly positioned panoramas tend to yield incorrect results but
+with very high confidence. A rather better strategy is to use the best
+viewing direction from the best panorama.
+
+
+
+
+\hang{icon generation} To show objects in floorplan, we need to get the
+2D shape of objects from top-down view. For each object, we first
+project all points to x-y plane to get a 2D density map. Then we perform
+marching cube algorithm on the density map to get a 2D contour, followed
+by simplification to reduce vertices number and suppress noise. This 2D
+polygon is then fed into triangulation algorithm and transformed to
+manhattan coordinate system and finally rendered in floorplan view.
+
+
+
+
+
+Note that we do not prevent intersections with geometries at the other
+nodes in this step, although it is not difficult to do so (infinite data
+cost for prohibited depth values). Our observation is that the
+topological consistency is crucial for high-end graphics or InverseCAD
+applications. However, a small amount of mesh self-intersections did not
+cause problems in our applications as demonstrated in
+Sect.~\ref{section:applications}
+
+
+talk about the fact that objects are points, and we did not pay
+attention to meshing much.

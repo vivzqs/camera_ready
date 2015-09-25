@@ -1,0 +1,162 @@
+\section{Introduction}
+%The last decade has witnessed dramatic improvements in outdoor 3D
+%modeling~\cite{seitz-etal-cvpr-2006,hernandez04,Furu09c,VuCVPR09}. Their
+%applications range from civil
+%engineering~\cite{mani_progress_monitoring} and
+%archeology~\cite{archaeology_application} in academia to digital
+%mapping~\cite{google-maps}, visual effects~\cite{ILM} and 3D
+%printing~\cite{123DCatch} in industry.
+
+Indoor scenes exhibit rich geometric and functional structures, which
+are carefully designed to optimize the quality of our private, social
+and economic activities. A fundamental task in indoor modeling is to
+discover structural elements constituting an indoor scene, such as
+rooms, doors, and walls, then reconstructs a structured 3D model
+consisting of such elements.
+%Imagine we would have a structured indoor 3D model for every single
+%building.
+%A government official could take city-scale indoor 3D models to assess
+%compliance with building codes, accessibility codes, and energy
+%efficiency levels.
+The potential applications of such 3D models range from architecture,
+civil engineering, digital mapping, urban geography, real estate, and
+more.
+
+Indoor scene understanding and reconstruction has been an
+active research topic in computer vision thanks to the development of
+consumer depth sensors such as Microsoft
+Kinect~\cite{kinect_fusion}. However, existing work has focused on
+small-scale indoor scenes such as a single room or a corner of a single room
+%\eg, inferring a room layout and/or object
+%placements
+~\cite{Hoiem13,nyu_12}.  Semantic reconstruction (SR) has been active in Computer Vision and Robotics~\cite{herbst2014toward}, but their focus is again small-scale and on clutter-analysis. %~\cite{lee2009geometric,Hedau2009,flint2010b,fouhey2013data,silvio_indoor_13,Hoiem13,cornel_indoor_13,nyu_12,flint2011,ssfm,hane2013joint,jia20133d,jiang2013hallucinated,herbst2014toward},
+Furthermore, they assign semantics to an existing geometry, as opposed
+to leverage the semantics for reconstruction.
+%
+Building-scale indoor modeling approaches exist. However, their output
+is either a pure polygon soup~\cite{eccv_museum} or a set of planar
+patches~\cite{xiong2013automatic}.
+%their goal is to reconstruct a pure geometry (\ie, a polygon soup).
+%, which limits applications.
+
+
+%In contrast, our framework seeks to
+%recover architectural information for an entire building,
+%where the process of segmentation, annotation, and reconstruction
+%happens simultaneously.
+We establish a computational framework and algorithms for reconstructing
+{\it structured indoor model} from panorama RGBD images.
+% that yields structured 3D representation of an indoor scene.
+We introduce a new 3D model representation ``structure graph'', whose
+nodes represent structural elements such as rooms, doors, and objects,
+and the edges represent their geometric relationships. ``Structure
+grammar'' then defines a list of possible graph transformations. This
+grammar drives a principled new reconstruction algorithm, where the
+rules are sequentially applied to naturally segment, annotation, and
+reconstruct architectural elements.
+
+
+The framework allows a different geometric representation (\eg, mesh,
+depthmap, or point-cloud) and a different reconstruction algorithm for each element. An effective choice is possible, since our
+approach is top-down and the full context is given when reconstructing
+each element. The paper also proposes new room segmentation and depthmap
+reconstruction algorithms that outperform the state-of-the-art and
+contribute to the generation of high quality models in our framework.
+%The key is the enforcement of the architectural shape priors, and these
+%methods are capable of producing very compact 3D models far beyond
+%existing methods.
+%
+Despite the flexible model representation, our framework guarantees to
+produce a manifold mesh, which enables a wide range of new
+applications. Our framework is evaluated qualitatively and
+quantitatively based on both the synthetic and real datasets.
+%Please see the supplementary video demonstrating some of the
+%applications.
+% We will demonstrante a novel indoor scene viewer, an Inverse-CAD
+% application, and the capability to digital map, which provides
+% photo-realistic views of a scene from ground to air, shows abstracted
+% floorplan, and allows one to navigate and explore a scene through
+% interactions at the level of the room entities. Inverse-CAD is another
+% application, where our model can be directly imported to a CAD system
+% for easy human post-processing. The structured model representation
+% allows one to intuitively control the complexity of the output mesh, for
+% example, by specifying the maximum number of polygons allowed for each
+% room, wall, or an entire scene (\eg, for mobile applications).
+The contributions of this paper are three-fold.
+ 
+\mysubsubsection{Framework contribution} A principled new structured
+model representation and a reconstruction framework. This framework is
+general and applicable to other domains, such as outdoor architectural
+scenes or man-made objects,
+%(\ie, reverse engineering),
+where the subjects consist of structural elements with regularities.
+
+
+\mysubsubsection{Technical contribution} A room segmentation and
+reconstruction algorithm that explicitly classifies room connection
+types, and a depthmap algorithm that produces extremely compact model by
+enforcing both the low-entropy and the low-rank structure in the output
+label space.
+
+\mysubsubsection{System contribution} To the best of our knowledge,
+the first system to 1) produce segmented and annotated 3D models from
+the level of rooms down to objects, 2) generate floorplan images
+automatically, 3) enable a compelling Inverse-CAD application for indoor
+scenes, and 4) allows intuitive and direct model-complexity control
+(\eg, specify the maximum polygon counts for each element type).
+
+
+% \eg, primitive generation and fitting~\cite{eccv_museum, Mura2014} that
+% produces the ``polygonal soup'' of the indoor geometry, our approach is
+% top-down, where the structure graph of the indoor scene is recovered and
+% then converted into the geometry (e.g., 3D meshes). Therefore, our
+% structured model allows users to control the element-level complexity of
+% the model by manipulating the graph rather than the geometry, which
+% enables the post-manipulation of the reconstructed model \eg, on the CAD
+% system, that facilitates novel applications in science, engineering and
+% commerce, which would impact our activities to a great extent.
+
+
+
+% This structured graph representation yields a globally-consistent
+% manifold mesh at the scale of a building.
+
+% Our approach exhibits several key differences. 
+
+
+% In this work, we input spherical panorama RGB-D images from sparse
+% viewpoints in the indoor scene rather than using dense RGB-D stream
+% like~\cite{Henry2012}. The main reason is, we consider that one of the
+% main applications of the indoor modeling is the {\it exploration}, and
+% an augmented sphere where the panoramas are attached allows us to
+% perform novel view synthesis in all directions as will be shown in this
+% paper.
+
+% The main contributions of our paper are summarized as follow,
+
+% % \item We propose the structured indoor scene representation that encodes the complex relationship of an indoor scene elements.
+% % \item We present a complete framework and algorithms that reconstruct the structured model from sparsely distributed RGB-D panorama images.
+% % \item We evaluate our framework both on synthetic and real datasets
+% % and present various applications using our structured indoor
+% % modeling.
+% \noindent{\bf Framework constribution}: Novel structured indoor scene representation and modeling framework that is generic beyond indoor scenes.
+
+% \noindent{\bf Technical contribution}: Room segmentation and
+% reconstruction algorithm and piecewise planar 2D offsetmap
+% reconstruction algorithm.
+
+% \noindent{\bf System contribution}: A wide range of key applications
+% (indoor map, inverse CAD, automatic floorplan map generation,
+% intuitive complexity control). The first system to automatically
+% produce segmented and annotated 3D models at a large scale.
+
+
+% first paper to segmented, and annotated 3D model from the scale of an
+% entire scene, room, down to an object. applications
+
+%%\yasu{need to polish.}
+
+
+%\yasu{emphasize that our method is top down and does not perform primitive extraction at all, while most existing algorithms for compact 3D modeling relies on primitive generation, which is the most problematic step of these methods, and are bottom-up.}
+%
+%\yasu{Emphasize that rgbd panorama is standard than kinect.}

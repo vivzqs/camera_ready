@@ -1,0 +1,147 @@
+%#BIBTEX /usr/texbin/bibtex main
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{iccv}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{nccmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{tabularx}
+\usepackage{comment}
+%\usepackage{algpseudocode}
+
+
+
+\newcommand{\Tref}[1]{Table~\ref{#1}}
+\newcommand{\Eref}[1]{Eq.~(\ref{#1})}
+\newcommand{\Fref}[1]{Fig.~\ref{#1}}
+\newcommand{\Sref}[1]{Section~\ref{#1}}
+\newcommand{\Aref}[1]{Algorithm~\ref{#1}}
+\newcommand{\argmax}{\mathop{\rm arg~max}\limits}
+\newcommand{\argmin}{\mathop{\rm arg~min}\limits}
+
+\newcommand{\mysubsubsection}[1]{\vspace{0.1cm} \noindent \underline{{\bf #1}}:}
+\newcommand{\mysubsubsubsection}[1]{\vspace{0.1cm} \noindent {\bf #1}:}
+%\newcommand{\ikehata}[1]{\textcolor{blue}{ikehata:{#1}}}
+%\newcommand{\yasu}[1]{\textcolor{magenta}{[yasu: {#1}]}}
+%\newcommand{\hang}[1]{\textcolor{cyan}{[hang: {#1}]}}
+\newcommand{\ikehata}[1]{}
+\newcommand{\yasu}[1]{}
+\newcommand{\hang}[1]{}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[pagebackref=true,breaklinks=true,letterpaper=true,colorlinks,bookmarks=false]{hyperref}
+
+ \iccvfinalcopy % *** Uncomment this line for the final submission
+
+\def\iccvPaperID{745} % *** Enter the ICCV Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+\ifx\pdfoptionalwaysusepdfpagebox\relax\else
+\pdfoptionalwaysusepdfpagebox5
+\fi
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+\ificcvfinal\pagestyle{empty}\fi
+\begin{document}
+	
+%%%%%%%%% TITLE
+\title{Structured Indoor Modeling}
+	
+\author{First Author\\
+	Institution1\\
+	Institution1 address\\
+	{\tt\small firstauthor@i1.org}
+	% For a paper whose authors are all at the same institution,
+	% omit the following lines up until the closing ``}''.
+	% Additional authors and addresses can be added with ``\and'',
+	% just like the second author.
+	% To save space, use either the email address or home page, not both
+	\and
+	Second Author\\
+	Institution2\\
+	First line of institution2 address\\
+{\tt\small secondauthor@i2.org}
+}
+	
+\maketitle
+%\thispagestyle{empty}
+	
+	
+%%%%%%%%% ABSTRACT
+\begin{abstract}
+This paper presents a novel 3D modeling framework that reconstructs an
+indoor scene as a structured model from panorama RGBD images. A scene
+geometry is represented as a graph, where nodes correspond to structural
+elements such as rooms, walls, and objects. The approach devises a
+structure grammar that defines how a scene graph can be manipulated. The
+grammar then drives a principled new reconstruction algorithm, where the
+grammar rules are sequentially applied to recover a structured model.
+%The application of the grammar automatically yields a segmented and an
+%annotated 3D model.
+The paper also proposes a new room segmentation algorithm and a depthmap
+reconstruction algorithm that are used in the framework and can enforce
+architectural shape priors far beyond existing state-of-the-art.  The
+structured scene representation enables a variety of novel applications,
+ranging from indoor scene visualization, automated floorplan generation,
+Inverse-CAD, and more.  We have tested our framework and algorithms on
+six synthetic and five real datasets with qualitative and quantitative
+evaluations.
+ %, compared against current state-of-the-art.
+ 
+ 
+% and architectural shape reconstruction algorithms, which are top-down
+% and does not rely on the primitive detection. Our framework is capable
+% of producing extremely compact piecewise planar and axis-aligned 3D
+% model. The structured scene representation with a compact 3D model
+% enables a wide range of new applications. First, we present an indoor
+% scene navigation and exploration system leveraging the extracted scene
+% structure. Second, our model is CAD quality and can be directly loaded
+% into a CAD software and allow user interaction. Lastly, our
+% representation allows one to intuitively control the complexity of the
+% output mesh model far beyond existing methods, while preserving the
+% manifold-ness.  We have processed six synthetic and five real datasets,
+% and compared our algorithm against various baseline and state-of-the-art
+% methods. \yasu{I don't like this and need to revisit after finishing intro.}
+
+
+% Unlike most existing bottom-up approaches, our method is a top-down
+% approach that recovers the ``structured graph'', whose nodes correspond
+% to structural elements such as room, wall, and object, and edges
+% correspond to hierarchical and functional relationships of them. We then
+% compile a manifold mesh by producing the mesh geometry from each leaf
+% node of the graph, which enables us the element-level complexity control
+% (e.g., simple wall structure and complex ceiling structure) and
+% different configuration of the model (e.g., remove objects).
+
+
+ 
+% \yasu{Put the short version of the contribution summary here.}
+%\yasu{mention the number of real and synthetic datasets. mention we do
+%both qualitative and quantitative evaluations on both synthetic and real
+%datasets. we provide a wide range of effective applications enabled by
+%the structured mdoel representation. we also compare against existing
+%state-of-the-art and baseline methods.}
+\end{abstract}
+	
+\input{intro.tex} \input{relatedwork.tex} \input{representation.tex}
+\input{roomsegmentation.tex}
+%\input{detailreconstruction.tex}
+\input{experiments.tex}
+\input{applications.tex}
+\input{conclusion.tex}
+\clearpage
+{\small
+	\bibliographystyle{ieee}
+	\bibliography{egbib,furukawa}
+}
+	
+\end{document}
