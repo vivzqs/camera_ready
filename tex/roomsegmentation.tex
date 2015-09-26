@@ -73,7 +73,7 @@ The structured modeling repeats applying grammar rules whose
 pre-conditions are satisfied, until no rules can be applied.  The
 structure graph is initialized with a scene node, and the room
 segmentation is the only applicable rule initially.  In practice, the
-following two guidance are also used to control the rule applications:
+following three guidances are also used to control the rule applications:
 First, the wall detail reconstruction is applicable only after the
 system terminates with the remaining rules.  Without the restriction,
 the wall details might be reconstructed for a room, but the room could
@@ -84,22 +84,28 @@ room node.
 % A room node would be deleted if the room
 % reconstruction fails, and we would like to conduct the test as soon as
 % possible.
-This algorithm is not guaranteed to terminate, as it may iterate
-creating and removing rooms. However, our experiments show that the
-algorithm terminates efficiently in all our examples.
+Lastly, this algorithm is not guaranteed to terminate, as it may iterate
+creating and removing rooms. We limit the number of room addition ..
+
+
+%However, our experiments show that the algorithm terminates efficiently
+%in all our examples.
 
 
 \subsection{Indoor structure grammar}
 
-Our indoor reconstruction process is governed by the eight structure
-grammar rules illustrated in Figure~\ref{fig:graph_grammar}.
+Our indoor structure grammar consists of the eight rules
+%reconstruction process is governed by the eight structure
+%grammar rules illustrated
+in Fig.~\ref{fig:graph_grammar}.
 % We here focus our description to the five key rules. The remaining three
 % rules (room addition, room merging, and object reconstruction) are
 % relatively simple and their description is given in the supplementary
 % material.
-Due to the space limitation, we restrict our description to the major
-rules in this paper. The remaining three rules together with minor
-algorithmic details are given in the supplementary material. The actual progress of the graph construction is illustrated in~\Fref{fig:graph}.
+We restrict our description to the major rules here. The
+remaining three rules together with minor algorithmic details are given
+in the supplementary material. The example progress of the graph
+construction is shown in~\Fref{fig:graph}.
 %are minor, and the details are given in the supplementary material.
 \begin{figure*}[tb]
 \begin{center}
@@ -122,8 +128,8 @@ for simplicity. }
 
 
 \mysubsubsection{Room segmentation} The rule obtains the initial room
-segmentation on the XY-plane. Room boundaries are often ambiguous, and
-full 3D analysis will be conducted in future rules to refine the
+segmentation on the XY-plane. Since room boundaries are often ambiguous
+in 2D, full 3D analysis will be conducted in future rules to refine the
 segmentation. The rule takes a scene (pre-condition) and creates
 multiple rooms (transformation).
 %
