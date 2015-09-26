@@ -48,13 +48,14 @@ patches~\cite{xiong2013automatic}.
 We establish a computational framework and algorithms for reconstructing
 {\it structured indoor model} from panorama RGBD images.
 % that yields structured 3D representation of an indoor scene.
-We introduce a new 3D model representation ``structure graph'', whose
+We introduce a novel 3D model representation ``structure graph'', whose
 nodes represent structural elements such as rooms, doors, and objects,
 and the edges represent their geometric relationships. ``Structure
 grammar'' then defines a list of possible graph transformations. This
 grammar drives a principled new reconstruction algorithm, where the
-rules are sequentially applied to naturally segment, annotation, and
-reconstruct architectural elements. We propose grammars for the room segmentation, reconstruction, and an off-set map reconstruction that contribute to the generation of high quality yet extremely compact 3D models.
+rules are sequentially applied to naturally segment, annotate, and
+reconstruct architectural scenes. 
+
  
 The framework allows one to design a different geometric representation
 (\eg, mesh, depthmap, or point-cloud) and a different reconstruction
@@ -64,14 +65,17 @@ is top-down and the full context is given in reconstructing each
 element. 
 
 
-
+The paper also proposes new room segmentation and offset-map
+reconstruction algorithms that produce high quality yet extremely compact
+3D models.
+%
 %The key is the enforcement of the architectural shape priors, and these
 %methods are capable of producing very compact 3D models far beyond
 %existing methods.
-Despite the flexible model representation, our framework guarantees to
-produce a manifold mesh, which enables a wide range of new
-applications. Our framework is evaluated qualitatively and
-quantitatively with both the synthetic and real data.
+Despite the flexible representation, our framework guarantees to produce
+a manifold mesh, which enables a wide range of new applications. Our
+framework is evaluated qualitatively and quantitatively with both the
+synthetic and real data.
 %Please see the supplementary video demonstrating some of the
 %applications.
 % We will demonstrate a novel indoor scene viewer, an Inverse-CAD
@@ -84,7 +88,8 @@ quantitatively with both the synthetic and real data.
 % allows one to intuitively control the complexity of the output mesh, for
 % example, by specifying the maximum number of polygons allowed for each
 % room, wall, or an entire scene (\eg, for mobile applications).
-The contributions of this paper are three-fold.
+
+In summary, the contributions of the paper are three-fold:
  
 \mysubsubsection{Framework contribution} A principled new structured
 model representation and a reconstruction framework. This framework is
@@ -95,17 +100,19 @@ where the subjects consist of structural elements with regularities.
 
 
 \mysubsubsection{Technical contribution} A room segmentation and
-reconstruction algorithm that classifies room connection
-types, and a offset-map reconstruction algorithm that produces extremely compact model by
-enforcing both the low-entropy and the low-rank structure in the output
-label space.
+reconstruction algorithm that classifies room connection types, and an
+offset-map reconstruction algorithm that produces extremely compact
+model by enforcing both the low-entropy and the low-rank structure in
+the output label space.
 
 \mysubsubsection{System contribution} This paper is the first to 1)
 produce segmented and annotated models from the level of rooms to
-objects, 2) generate floorplans automatically, 3) enable a compelling
-Inverse-CAD application for indoor scenes, and 4) allows intuitive
-model-complexity control (\eg, specify the maximum polygon counts for
-each element type).
+objects, 2) generate floorplans automatically, and 3) enable a compelling
+Inverse-CAD application for indoor scenes.
+
+
+%, and 4) allows direct model-complexity control at varying levels (\eg,
+%specify the maximum polygon counts for each element type).
 
 
 % \eg, primitive generation and fitting~\cite{eccv_museum, Mura2014} that
