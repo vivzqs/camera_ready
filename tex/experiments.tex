@@ -38,16 +38,14 @@ together with the surface normal information.
 
 The positional and the normal accuracies are measured simply by the
 average error from the ground truth over the rasterized pixels
-(See~\Tref{table:quantitative}). Note that even without the object point
-clouds, our method achieves high precision thanks to our compact but
-accurate detail reconstruction algorithm.
+(See~\Tref{table:quantitative}). We observe that even without the object
+point clouds, our method achieves high precision thanks to the our compact but accurate reconstruction of details on walls, floor and ceiling. 
 %Note that our mesh model conveys useful structural information, while
 %other methods simply produce a polygon soup, whose applications are
 %limited.
 Errors are mainly due to the lack of objects, which can be verified by
 our results with object point clouds, which are also rasterized with
-splatting for evaluation.  Vgcuts has a strong axis-aligned
-regularization, and tends to lose details due to the shrinkage bias.
+splatting for evaluation. Poisson often overfits the surface on the dense point cloud and the normals on the surface are cluttered. Vgcuts has a strong axis-aligned regularization, and tends to lose details due to the shrinkage bias.
 \begin{table}[!t]
 \caption{Positional [mm] and normal errors [degrees] (inside
  parentheses) on synthetic data.}
@@ -171,8 +169,9 @@ simplification algorithm~\cite{Tarini2010} and the parameter tuning is
 used to make their polygon counts close to ours. The figure shows that
 both Poisson and Vgcuts models contain clutters. Instead, our approach
 successfully ignores clutters in modeling architectural components,
-yielding clean building structure. These clean models enable high
-quality texture mapping and rendering experiences, as well as,
+yielding clean and compact building structure. It is worth mentioning that our wall detail reconstruction algorithm recovers interesting details on walls (\eg, kitchen counter, window frame).
+
+These clean models enable high quality texture mapping and rendering experiences, as well as,
 interesting post geometry processing.
 \begin{figure}[!t]
 \begin{center}
