@@ -30,25 +30,25 @@ in~\cite{hane2013joint}, but their operating range is also small, as the
 entire scene is modeled as a voxel grid.
 
 \mysubsubsection{Large-scale indoor modeling}
-Recent developments in the sensor technologies enable us to capture
+Recent developments in the sensor technology enable us to capture
 dense 3D points in a large scale.
 %In the domain of construction and civil engineering, automated
 %acquisition of semantically rich building information models (BIMs) is a
 %focus of interest. They analyze building-scale LiDAR models.
 However, when it comes to the construction of a real 3D model (e.g., a
 mesh), existing methods only produce a set of planar patches at a room
-scale~\cite{xiong2013automatic}, simple geometric
-primitives for a part of a scene~\cite{mani_progress_monitoring}, a
-dense mesh staright from a voxel grid~\cite{Turner2015}, an extruded
-model from a floorplan~\cite{Turner2015}, or a ``polygon soup'' without
-any structure or semantics~\cite{eccv_museum}.
+scale~\cite{xiong2013automatic}, simple primitives for a part of a
+scene~\cite{mani_progress_monitoring}, a dense mesh from a voxel
+grid~\cite{Turner2015}, an extruded model from a
+floorplan~\cite{Turner2015}, or a ``polygon soup'' without any structure
+or semantics~\cite{eccv_museum}.
 %
 %
 For large scenes, room segmentation is also an important problem. The
 current state-of-the-art methods solve in a top-down 2D
-domain~\cite{Turner2015,Mura2014}. Room boundaries are often ambiguous in
-a top-down view, and our approach explicitly classifies room connection
-types with full 3D information to solve the problem.
+domain~\cite{Turner2015,Mura2014}, although room boundaries are often
+ambiguous in a top-down view. We explicitly classify room connection
+types with full 3D information.
 
 
 \mysubsubsection{Architectural shape priors}
@@ -57,13 +57,13 @@ types with full 3D information to solve the problem.
 Primitive detection is combined with Markov Random Field (MRF) to
 reconstruct piecewise planar depthmaps~\cite{ManhattanWorldStereo}.
 Detected 3D primitives can be assembled directly in the 3D
-space~\cite{eccv_museum}.  However, excessive number of
-primitives need to be extracted not to miss a single important one, and
-the primitive detecion often becomes the most problematic step. Instead,
-we combine MRF with Robust Principal Component Analysis
-(RPCA)~\cite{Candes2011} to enforce both the low-entropy and the low-rank
-structure in the depthmap to obtain much more compact 3D
-models without relying on the primitives.
+space~\cite{eccv_museum}.  However, excessive number of primitives need
+to be extracted in general not to miss a single important one, and the
+primitive detecion often becomes the most problematic step. Instead, we
+combine MRF with Robust Principal Component Analysis
+(RPCA)~\cite{Candes2011} to enforce both the low-entropy and the
+low-rank structure in the depthmap to obtain much more compact 3D models
+without extracting any primitive.
 
 % which is exacerbated by the curse of dimensionality, where only very
 % simple primitive types can be used.
