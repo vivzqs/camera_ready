@@ -54,9 +54,8 @@ and the edges represent their geometric relationships. ``Structure
 grammar'' then defines a list of possible graph transformations. This
 grammar drives a principled new reconstruction algorithm, where the
 rules are sequentially applied to naturally segment, annotation, and
-reconstruct architectural elements.
-
-
+reconstruct architectural elements. We propose grammars for the room segmentation, reconstruction, and an off-set map reconstruction that contribute to the generation of high quality yet extremely compact 3D models.
+ 
 The framework allows one to design a different geometric representation
 (\eg, mesh, depthmap, or point-cloud) and a different reconstruction
 algorithm to enforce the most effective architectural prior for each
@@ -65,14 +64,10 @@ is top-down and the full context is given in reconstructing each
 element. 
 
 
-The paper also proposes new room segmentation and depthmap
-reconstruction algorithms that outperform the state-of-the-art and
-contribute to the generation of high quality yet extremely compact
-3D models.
+
 %The key is the enforcement of the architectural shape priors, and these
 %methods are capable of producing very compact 3D models far beyond
 %existing methods.
-%
 Despite the flexible model representation, our framework guarantees to
 produce a manifold mesh, which enables a wide range of new
 applications. Our framework is evaluated qualitatively and
@@ -100,8 +95,8 @@ where the subjects consist of structural elements with regularities.
 
 
 \mysubsubsection{Technical contribution} A room segmentation and
-reconstruction algorithm that explicitly classifies room connection
-types, and a depthmap algorithm that produces extremely compact model by
+reconstruction algorithm that classifies room connection
+types, and a offset-map reconstruction algorithm that produces extremely compact model by
 enforcing both the low-entropy and the low-rank structure in the output
 label space.
 
