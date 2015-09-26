@@ -85,7 +85,7 @@ room node.
 % reconstruction fails, and we would like to conduct the test as soon as
 % possible.
 Lastly, this algorithm is not guaranteed to terminate, as it may iterate
-creating and removing rooms. We limit the number of room addition ..
+creating and removing rooms. We .... PLEASE FILL IN here.
 
 
 %However, our experiments show that the algorithm terminates efficiently
@@ -128,8 +128,8 @@ for simplicity. }
 
 
 \mysubsubsection{Room segmentation} The rule obtains the initial room
-segmentation on the XY-plane. Since room boundaries are often ambiguous
-in 2D, full 3D analysis will be conducted in future rules to refine the
+segmentation on the XY-plane. As room boundaries are often ambiguous
+in 2D, 3D analysis will be conducted in future rules to refine the
 segmentation. The rule takes a scene (pre-condition) and creates
 multiple rooms (transformation).
 %
@@ -253,11 +253,11 @@ by the nearest neighbor.
 % elements reconstruction.
 
 \mysubsubsection{Room reconstruction} This rule takes a room that has
-not been reconstructed yet, that is, a room node without any edge except
-for the incoming directed one (pre-condition). A room outline in a top-down
-view is reconstructed as a 1D polygon, which is extruded to the
-estimated floor and ceiling heights to generate a 3D model. This rule
-generates a floor, a ceiling and a chain of wall nodes (transformation).
+not been reconstructed yet, that is, a room node with only incoming
+directed edges (pre-condition). A room outline in a top-down view is
+reconstructed as a 1D polygon, which is extruded to the estimated floor
+and ceiling heights to generate a 3D model. This rule generates a floor,
+a ceiling and a chain of wall nodes (transformation).
 %
 % \ikehata{Actually, I do not discard the reconstruction results when
 % firstly performing the shortest path reconstruction since each clusters
@@ -268,12 +268,12 @@ generates a floor, a ceiling and a chain of wall nodes (transformation).
 
 A room outline is generally piecewise planar and consists of a very few
 number of vertices. We employ the shortest-path based algorithm that is
-optimized to produce such a shape~\cite{Cabral2014}. There is one
+optimized to produce such shapes~\cite{Cabral2014}. There is one
 modification worth noting. The original algorithm requires the addition
-of ``anchor'' points to overcome the shrinkage bias.
+of ``anchor'' points to overcome the shrinkage bias, because
 %(\eg thin walls at the room boundaries).
-This is essential in their work, as they reconstruct an entire scene
-(i.e., multiple rooms) with a single shortest-path algorithm.
+they reconstruct an entire scene (i.e., multiple rooms) with a single
+shortest-path algorithm.
 %
 In this work, the algorithm is applied to each segmented
 room individually, and does not require anchor points.
@@ -447,28 +447,28 @@ below and above the average camera height, respectively.
 % process is continuously performed until no rectangles are extracted.
 
 \mysubsubsection{Wall/ceiling detail reconstruction} This rule recovers
-architectural details such as windows or kitchen counters as a 2D
-``offset-map''
+wall details such as windows or counters as an ``offset-map''.
 %, which is essentially a depthmap defined
-on a wall. The rule takes a wall or a wall with a doorway
-(pre-condition), and generates a new node with more detailed geometry
-under the same boundary conditions (transformation). The same applies to
-the ceiling.
-
+The rule takes a wall or a wall with a doorway (pre-condition), and
+generates a new node with more detailed geometry under the same boundary
+conditions (transformation). The same goes for the ceiling.
+%
 The wall details are represented as an axis-aligned 2D array of offset
-values along the wall normal. Where the size of each pixel is $0.012$ m. The offset value is zero, positive, and negative if the structure is on, in front of, or behind the wall, respectively.
+values along the wall normal. Where the size of each pixel is $0.012$
+m. The offset value is zero, positive, and negative if the structure is
+on, in front of, or behind the wall, respectively.
 
 %, which cannot be represented by the extruded 1D polygons.
 %The enforcement of geometric regularities has been an active research
 %area.
 Piecewise planar depthmap algorithms set up a problem so that the
-low-entropy (a few number of labels) solutions correspond to piecewise
-planar depthmaps~\cite{ManhattanWorldStereo,SinhaPlane09,GallupPlanar10}.
+low-entropy (a few labels) solutions correspond to piecewise planar
+depthmaps~\cite{ManhattanWorldStereo,SinhaPlane09,GallupPlanar10}.
 %Standard MRF and Graph-cuts is an effective solver for this type of
 %problems.
 This prior is also used in our formulation. A key difference is that our
 offset-map is defined on an axis-aligned wall, and the label boundary
-(\ie, depth discontinuity) becomes axis-aligned.
+(\ie, depth discontinuity) is also axis-aligned.
 %
 % node with details such as the beam structures.
 \begin{figure}[!t]
@@ -495,7 +495,7 @@ extracted as the label boundary candidates, and the running time is
 exponential in its number.
 %We experimented with sparse higher-order MRF~\cite{pushmeet} to enforce
 %this constraint, but the optimization became a challenge.
-Our key observation is that a piecewise planar ``label boundary'' means
+Our key observation is that an axis-aligned ``label boundary'' means
 low-rank, where we have an effective optimization tool such as Robust
 Principal Component Analysis (RPCA)~\cite{Candes2011} to enforce this
 constraint.  
@@ -515,29 +515,61 @@ constraint.
 % further limit the range to be in $[-1.2\mbox{m}, 0.75\mbox{m}]$ for
 % efficiency.
 %
-Based on our observation, a very compact offset-map is estimated by solving two problems repeatedly:
+
+More specifically, we first initialize the offset-map by a standard MRF
+with unary and pairwise terms (See the supplementary material for the
+energy definitions). We then repeat solving the following two problems:
+%Based on our observation, a very compact offset-map is estimated by
+%solving two problems repeatedly:
 \begin{eqnarray}
  \min_{D_r}&& \|E\|_1 + \mu_1 \|D_r\|_*\quad s.t.\;\; D_m
  = D_r + E, \nonumber \\
- \min_{D_m}&& \|D_m-D_r\|^2_2 + \mu_2\|\nabla D_m\|_0 + \mu_3Label(D_m) \label{eq:sub2},
+ \min_{D_m}&& \|D_m-D_r\|^2_2 + \mu_2\|\nabla D_m\|_0 + \mu_3Label(D_m) \label{eq:sub2}.
 \end{eqnarray}
-where $\mu_1 = \sqrt{{\rm max}(m,n)}$, $m$, $n$ is the rows and cols of the off-set map. And we set other control parameters as $\mu_2=5.0\times 10^2$ and $\mu_3$ = $10^5$. $D_r$ and $D_m$ denotes the low-rank and low-entropy offset-maps, respectively. This implies that in the first problem, RPCA factorizes the low-entropy matrix into a low-rank structure $D_r$ and a sparse error matrix $E$, and then the number of unique values in the offset-map is reduced in the second problem using $D_r$ as a soft constraint. 
+The first problem decomposes the input offset-map $D_m$ into a low-rank
+matrix $D_r$ and a sparse error matrix $E$ via RPCA. The second problem
+takes the low-rank matrix $D_r$, and enforces low-entropy via MRF.  It
+is worth noting that the first term in the second problem is a unary
+term ensuring the consistency between $D_r$ and $D_m$, the second term
+is a simple Potts model penalizing the label changes, and the third term
+is the label cost~\cite{Delong2012} further enforcing the low-entropy
+structure.
+%
+The iteration converges very quickly in general (2 to 3 iterations), and
+the final offset-map is set to $D_m$, which requires few vertices and
+faces (See Fig.~\ref{fig:comp_details}).
+% It is worth mentioning that we optimize the second equation as the
+% discrete MRF optimization problem for enforcing the label cost. In this
+% context, the first term in the second problem is a data penalty ensuring
+% the consistency between $D_r$ and $D_m$, the second term is a simple
+% Potts model penalizing the label changes, and the third term is the
+% label cost~\cite{Delong2012} further enforcing the low-entropy
+% structure.
+$\mu_1$ is $\sqrt{\max(W, H)}$ as in ~\cite{Candes2011}, where $W$ and
+$H$ are the dimension of the offset-map in pxiels. $\mu_2$ and $\mu_3$
+are set to $500$ and $10^5$, respectively.
 
-It is worth mentioning that we optimize the second equation as the discrete MRF optimization problem for enforcing the label cost. In this context, the first term in the second problem is a data penalty ensuring the consistency between $D_r$ and $D_m$, the second term is a simple Potts model penalizing the label changes, and the third term is the label cost~\cite{Delong2012} further enforcing the low-entropy structure. 
+
+
+% $D_r$ and $D_m$ denotes the low-rank and low-entropy offset-maps,
+% respectively. This implies that in the first problem, RPCA factorizes
+% the low-entropy matrix into a low-rank structure $D_r$ and a sparse
+% error matrix $E$, and then the number of unique values in the offset-map
+% is reduced in the second problem using $D_r$ as a soft constraint.
+
+
+
+
 %Note that RPCA and MRF optimizes different criteria. Therefore, we
 %prepare two different offset-map variables, and rely on the constraints
-$D_r$ is initialized 
+%$D_r$ is initialized 
 % The only missing piece is the initialization of $D_r$, which is obtained
-by a standard MRF with unary and pairwise terms, which reconstructs a raw
-offset-map
+%by a standard MRF with unary and pairwise terms, which reconstructs a raw
+%offset-map
 % by the $\alpha$-expansion algorithm
-(See the supplementary material for the definitions of the energy
-terms for this step).
+%(See the supplementary material for the definitions of the energy
+%terms for this step).
 %
-The iteration converges very quickly in general (2 to 3
-iterations). $D_m$ is used as the final offset-map except for $D_r$,
-which is low-rank but requires more vertices and polygons (See
-Fig.~\ref{fig:comp_details}).
 
 
 % While MRF takes a cost-volume (\ie, point and free-space evidences) as
