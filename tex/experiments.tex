@@ -44,7 +44,8 @@ The positional and the normal accuracies are measured simply by the
 average error from the ground truth over the rasterized pixels
 (See~\Tref{table:quantitative}). We observe that even without the object
 point clouds, our method achieves high precision despite the low-polygon
-counts, thanks to our room and detail reconstruction algorithms.
+counts.
+%, thanks to our room and detail reconstruction algorithms.
 %compact but accurate reconstruction of details on walls, floor and
 %ceiling.
 %Note that our mesh model conveys useful structural information, while
@@ -91,7 +92,7 @@ Figure~\ref{fig:result_real} illustrates the five real datasets, where
 their statistics are summarized in~\Tref{table:statistics}.
 \begin{figure*}[!t]
 \begin{center}
-\includegraphics[width=155mm]{../figures/result_real2.pdf}
+\includegraphics[width=162mm]{../figures/result_real2.pdf}
 \end{center}
  \vspace{-0.3cm}
 \caption{Results on the real datasets.  From top to bottom: the input
@@ -188,8 +189,9 @@ yielding clean and compact building structure. It is worth mentioning
 that our wall detail reconstruction algorithm recovers interesting
 details on walls (\eg, kitchen counter, window frame).
 %
-These clean models enable high quality texture mapping and rendering experiences, as well as,
-interesting post geometry processing.
+These clean models enable high quality texture mapping and rendering
+experiences as well as interesting post geometry processing, as
+demonstrated in our supplementary video.
 \begin{figure}[!t]
 \begin{center}
 \includegraphics[width=85mm]{../figures/comp_samemesh2.pdf}
@@ -204,7 +206,7 @@ We compare our room segmentation process against two state-of-the-art
 methods~\cite{Mura2014,Turner2015} in Fig.~\ref{fig:result_all}.  We
 asked the authors to process our data with their native
 implementations. Our method provides reasonable segmentation that mostly
-preserves the number of structural cluster (\eg, room, aisle) and
+preserves the number of structural cluster (\eg, rooms and aisles) and
 important details.
 %, although occasionally produce under-segmented results (\eg, office1).
 The over-segmentation is often observed in~\cite{Turner2015}, and the
