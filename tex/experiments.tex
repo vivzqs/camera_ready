@@ -150,6 +150,10 @@ Although it is difficult to conduct quantitative evaluations on real
 datasets, Table~\ref{table:statistics} provides positional errors (the
 same metric as in Table~\ref{table:quantitative}) of our model with and
 without the wall details and the object point clouds.
+The table shows that our models achieve 10 to 20 cm average accuracy
+despite being a few orders of magnitude more compact than typical
+reconstruction methods.
+%
 More evaluations including qualitative and quantitative comparisons
 against Poisson and Vgcuts meshes are provided in the supplementary material.
 
@@ -180,8 +184,10 @@ simplification algorithm~\cite{Tarini2010} and the parameter tuning is
 used to make their polygon counts close to ours. The figure shows that
 both Poisson and Vgcuts models contain clutters. Instead, our approach
 successfully ignores clutters in modeling architectural components,
-yielding clean and compact building structure. It is worth mentioning that our wall detail reconstruction algorithm recovers interesting details on walls (\eg, kitchen counter, window frame).
-
+yielding clean and compact building structure. It is worth mentioning
+that our wall detail reconstruction algorithm recovers interesting
+details on walls (\eg, kitchen counter, window frame).
+%
 These clean models enable high quality texture mapping and rendering experiences, as well as,
 interesting post geometry processing.
 \begin{figure}[!t]
