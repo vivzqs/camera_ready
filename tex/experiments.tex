@@ -24,28 +24,38 @@ and wall details.
 
 We compare our algorithm against the baseline methods in Computer
 Graphics and Computer Vision, namely, the screened poisson
-reconstruction algorithm (Poission)~\cite{Kazhdan2013} and the Manhattan
-volumetric graphcuts algorithm (Vgcuts)~\cite{furukawa-iccv-2009}. We
-are interested in the trade-off between the geometric accuracy and the
-model complexity (\eg., the number of polygons in the model). Therefore,
-a standard mesh simplification algorithm~\cite{Tarini2010} is used to
+reconstruction (Poission)~\cite{Kazhdan2013} and the Manhattan
+volumetric graphcuts (Vgcuts)~\cite{furukawa-iccv-2009}. We are
+interested in the trade-off between the geometric accuracy and the model
+complexity (\eg., the number of polygons in the model). Therefore, a
+standard mesh simplification algorithm~\cite{Tarini2010} is used to
 control the numbers of polygons for Poisson. For Vgcuts, we tune the
 weight on the smoothness penalty to control the polygon counts. For both
 methods, we generated a low-res and high-res mesh models. The polygon
-count of the low-res model is set to be very close to ours. Each mesh
+count of the low-res model is set to be very close to ours. High-res
+models by Poisson and Vgcuts usually contain $10^5$ and $10^2$ times
+more polygons than ours.
+%
+Each mesh
 model is rasterized into a panorama image to generate a depth image
 together with the surface normal information.
 
 The positional and the normal accuracies are measured simply by the
 average error from the ground truth over the rasterized pixels
 (See~\Tref{table:quantitative}). We observe that even without the object
-point clouds, our method achieves high precision thanks to the our compact but accurate reconstruction of details on walls, floor and ceiling. 
+point clouds, our method achieves high precision despite the low-polygon
+counts, thanks to our room and detail reconstruction algorithms.
+%compact but accurate reconstruction of details on walls, floor and
+%ceiling.
 %Note that our mesh model conveys useful structural information, while
 %other methods simply produce a polygon soup, whose applications are
 %limited.
 Errors are mainly due to the lack of objects, which can be verified by
-our results with object point clouds, which are also rasterized with
-splatting for evaluation. Poisson often overfits the surface on the dense point cloud and the normals on the surface are cluttered. Vgcuts has a strong axis-aligned regularization, and tends to lose details due to the shrinkage bias.
+our results with object point clouds, where point clouds are rasterized
+with splatting. Poisson often overfits the surface on the dense point
+cloud and the normals on the surface are cluttered. Vgcuts has a strong
+axis-aligned regularization, and tends to lose details due to the
+shrinkage bias.
 \begin{table}[!t]
 \caption{Positional [mm] and normal errors [degrees] (inside
  parentheses) on synthetic data.}
@@ -113,13 +123,14 @@ mirrors, windows, reflective objects, and calibration errors.
 %
 %
 The second row in Fig.~\ref{fig:result_real} shows the reconstructed
-meshes, compiled from the leaf nodes except for objects in the
-structure graph. The color of each geometry is determined by the
-parent room node. The third row shows the full renderings including the
-object point clouds, which are rendered by the point-based rendering
-technique. Note that ceiling geometries are not rendered on purpose to
-visualize the interior, which is not easy for polygon soup mesh
-models.
+meshes, compiled from the leaf nodes except for objects in the structure
+graph. The color of each geometry is determined by the parent room
+node. The third row shows the full renderings including the object point
+clouds, which are rendered by the point-based rendering technique. Our
+models are segmented and annoated with the structural element types
+(e.g., floor and walls), and the ceiling geometries are not rendered on
+purpose to visualize the interior, which is not easy for standard
+reconstruction methods such as Poisson and Vgcuts.
 % More evaluations are provided in the supplementary material.
 %
 % At the second rows, we show the reconstructed manifold meshes compiled
