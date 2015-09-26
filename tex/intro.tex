@@ -23,13 +23,14 @@ civil engineering, digital mapping, urban geography, real estate, and
 more.
 
 Indoor scene understanding and reconstruction has been an
-active research topic in computer vision thanks to the development of
-consumer depth sensors such as Microsoft
-Kinect~\cite{kinect_fusion}. However, existing work has focused on
-small-scale indoor scenes such as a single room or a corner of a single room
+active research topic in computer vision.
+%thanks to the development of consumer depth sensors such as Microsoft
+%Kinect~\cite{kinect_fusion}.
+However, existing work has focused on small-scale indoor scenes such as
+a single room or a corner of a single room
 %\eg, inferring a room layout and/or object
 %placements
-~\cite{Hoiem13,nyu_12}.  Semantic reconstruction (SR) has been active in Computer Vision and Robotics~\cite{herbst2014toward}, but their focus is again small-scale and on clutter-analysis. %~\cite{lee2009geometric,Hedau2009,flint2010b,fouhey2013data,silvio_indoor_13,Hoiem13,cornel_indoor_13,nyu_12,flint2011,ssfm,hane2013joint,jia20133d,jiang2013hallucinated,herbst2014toward},
+~\cite{Hoiem13,nyu_12}.  Semantic reconstruction (SR) has been active in Computer Vision and Robotics~\cite{herbst2014toward}, but their focus is again small-scale and/or on clutter-analysis. %~\cite{lee2009geometric,Hedau2009,flint2010b,fouhey2013data,silvio_indoor_13,Hoiem13,cornel_indoor_13,nyu_12,flint2011,ssfm,hane2013joint,jia20133d,jiang2013hallucinated,herbst2014toward},
 Furthermore, they assign semantics to an existing geometry, as opposed
 to leverage the semantics for reconstruction.
 %
@@ -56,12 +57,18 @@ rules are sequentially applied to naturally segment, annotation, and
 reconstruct architectural elements.
 
 
-The framework allows a different geometric representation (\eg, mesh,
-depthmap, or point-cloud) and a different reconstruction algorithm for each element. An effective choice is possible, since our
-approach is top-down and the full context is given when reconstructing
-each element. The paper also proposes new room segmentation and depthmap
+The framework allows one to design a different geometric representation
+(\eg, mesh, depthmap, or point-cloud) and a different reconstruction
+algorithm to enforce the most effective architectural prior for each
+structural element. An effective choice is possible, since our approach
+is top-down and the full context is given in reconstructing each
+element. 
+
+
+The paper also proposes new room segmentation and depthmap
 reconstruction algorithms that outperform the state-of-the-art and
-contribute to the generation of high quality models in our framework.
+contribute to the generation of high quality yet extremely compact
+3D models.
 %The key is the enforcement of the architectural shape priors, and these
 %methods are capable of producing very compact 3D models far beyond
 %existing methods.
@@ -69,7 +76,7 @@ contribute to the generation of high quality models in our framework.
 Despite the flexible model representation, our framework guarantees to
 produce a manifold mesh, which enables a wide range of new
 applications. Our framework is evaluated qualitatively and
-quantitatively based on both the synthetic and real datasets.
+quantitatively with both the synthetic and real data.
 %Please see the supplementary video demonstrating some of the
 %applications.
 % We will demonstrante a novel indoor scene viewer, an Inverse-CAD
@@ -98,12 +105,12 @@ types, and a depthmap algorithm that produces extremely compact model by
 enforcing both the low-entropy and the low-rank structure in the output
 label space.
 
-\mysubsubsection{System contribution} To the best of our knowledge,
-the first system to 1) produce segmented and annotated 3D models from
-the level of rooms down to objects, 2) generate floorplan images
-automatically, 3) enable a compelling Inverse-CAD application for indoor
-scenes, and 4) allows intuitive and direct model-complexity control
-(\eg, specify the maximum polygon counts for each element type).
+\mysubsubsection{System contribution} This paper is the first to 1)
+produce segmented and annotated models from the level of rooms to
+objects, 2) generate floorplans automatically, 3) enable a compelling
+Inverse-CAD application for indoor scenes, and 4) allows intuitive
+model-complexity control (\eg, specify the maximum polygon counts for
+each element type).
 
 
 % \eg, primitive generation and fitting~\cite{eccv_museum, Mura2014} that
