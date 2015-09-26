@@ -528,16 +528,15 @@ energy definitions). We then repeat solving the following two problems:
 \end{eqnarray}
 The first problem decomposes the input offset-map $D_m$ into a low-rank
 matrix $D_r$ and a sparse error matrix $E$ via RPCA. The second problem
-takes the low-rank matrix $D_r$, and enforces low-entropy via MRF.  It
-is worth noting that the first term in the second problem is a unary
-term ensuring the consistency between $D_r$ and $D_m$, the second term
-is a simple Potts model penalizing the label changes, and the third term
-is the label cost~\cite{Delong2012} further enforcing the low-entropy
-structure.
+takes the low-rank matrix $D_r$, and enforces low-entropy via MRF. The
+first term in the second problem is a unary term ensuring the
+consistency between $D_r$ and $D_m$, the second term is a simple Potts
+model penalizing the label changes, and the third term is the label
+cost~\cite{Delong2012} further enforcing the low-entropy structure.
 %
-The iteration converges very quickly in general (2 to 3 iterations), and
-the final offset-map is set to $D_m$, which requires few vertices and
-faces (See Fig.~\ref{fig:comp_details}).
+The iteration converges very quickly in general (2 to 3 iterations). The
+final offset-map is set to $D_m$, which is compact and requires few
+polygons for meshing (See Fig.~\ref{fig:comp_details}).
 % It is worth mentioning that we optimize the second equation as the
 % discrete MRF optimization problem for enforcing the label cost. In this
 % context, the first term in the second problem is a data penalty ensuring
@@ -545,9 +544,9 @@ faces (See Fig.~\ref{fig:comp_details}).
 % Potts model penalizing the label changes, and the third term is the
 % label cost~\cite{Delong2012} further enforcing the low-entropy
 % structure.
-$\mu_1$ is $\sqrt{\max(W, H)}$ as in ~\cite{Candes2011}, where $W$ and
-$H$ are the dimension of the offset-map in pxiels. $\mu_2$ and $\mu_3$
-are set to $500$ and $10^5$, respectively.
+$\mu_1$ is set to $\sqrt{\max(W, H)}$ as in ~\cite{Candes2011}, where
+$W$ and $H$ are the dimension of the offset-map in pixels. $\mu_2$ and
+$\mu_3$ are set to $500$ and $10^5$, respectively.
 
 
 
@@ -776,17 +775,18 @@ pre-conditions of the door-addition and room-merging rules, respectively,
 This classifier is the key to improve the final room segmentation quality.
 
 Given a pair of rooms, we identify a pair of walls that are parallel,
-are within a distance of $1.0$ m vertically (\ie, along the normal), and
-have non-zero lateral overlap. For such pair of walls, we compute the
-most-likely shape of the door on the walls based on the nearby point and
-free-space evidences. More concretely, each wall is discretized into an
-array of pixels, whose size is the same as the voxel (\ie,
-$0.012$m). The point $P_w(p)$ and free-space $F_w(p)$ evidences on the
-wall are obtained by summing $P(v)$ and $F(v)$ along the normal
-direction with a margin of 5 voxels, respectively. $P_w$ and $F_w$ are
-calculated for each of the two walls, but we know the
-correspondence. With abuse of notation, $P_w(p)$ and $F_w(p)$ denote the
-sum over the two walls for each pixel $p$.
+are within a distance of $1.0$ m along the normal, and have non-zero
+lateral overlap. For such pair of walls, we compute the most-likely
+shape of the door on the walls based on the nearby point and free-space
+evidences. More concretely, each wall is discretized into an array of
+pixels, whose size is the same as the voxel (\ie, $0.012$m). The point
+$P_w(p)$ and free-space $F_w(p)$ evidences on the wall are obtained by
+summing $P(v)$ and $F(v)$ along the normal direction with a margin of 5
+voxels, respectively.
+$P_w$ and $F_w$ are calculated for each of the two walls.
+%, but we know the correspondence.
+With abuse of notation, $P_w(p)$ and $F_w(p)$ denote the sum over the
+two walls for each pixel $p$.
 
 We want $P_w$ and $F_w$ to be small and large inside the doorway,
 respectively. Therefore, the door shape is obtained by finding the
@@ -797,10 +797,9 @@ rectangle $\Omega$ that minimizes
   }\Omega\}.
 \end{eqnarray}
 The last term is to prefer a smaller rectangle when the solution is
-ambiguous due to the lack of evidences. This can be efficiently
-computed by using the integral images.
-Given the detected rectangle shape and the pair of walls, the connection
-type is classified.
+ambiguous due to the lack of evidence. This can be efficiently computed
+by using the integral images.  Given the detected rectangle shape and
+the pair of walls, the connection type is classified.
 %
 % The results of the room segmentation step often contains errors, 
 % as there is a limit in the 2D analysis from a top-down view.
