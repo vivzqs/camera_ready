@@ -86,8 +86,7 @@ room node.
 % possible.
 Lastly, the process converges in practice (See \Fref{fig:graph}) but is
 not guaranteed to terminate as it may iterate creating and removing
-rooms. Therefore, we set a rule to apply the room merging grammar only
-once.
+rooms. The room merging rule is applied at most once.
 %Lastly, this algorithm is not guaranteed to terminate, as it may iterate
 %creating and removing rooms. However, we empirically found that the room
 %segmentation process converges after the first room merging as shown

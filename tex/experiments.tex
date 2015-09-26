@@ -151,11 +151,11 @@ datasets, Table~\ref{table:statistics} provides positional errors (the
 same metric as in Table~\ref{table:quantitative}) of our model with and
 without the wall details and the object point clouds.
 The table shows that our models achieve 10 to 20 cm average accuracy
-despite being a few orders of magnitude more compact than typical
-reconstruction methods.
+even without the object point clouds.
 %
 More evaluations including qualitative and quantitative comparisons
-against Poisson and Vgcuts meshes are provided in the supplementary material.
+against Poisson and Vgcuts meshes are provided in the supplementary
+material.
 
 
 % Furthermore, we also give statistics
@@ -202,9 +202,10 @@ interesting post geometry processing.
 
 We compare our room segmentation process against two state-of-the-art
 methods~\cite{Mura2014,Turner2015} in Fig.~\ref{fig:result_all}.  We
-asked the authors to process our data. Our method provides reasonable
-segmentation that mostly preserves the number of structural cluster
-(\eg, room, aisle) and important details.
+asked the authors to process our data with their native
+implementations. Our method provides reasonable segmentation that mostly
+preserves the number of structural cluster (\eg, room, aisle) and
+important details.
 %, although occasionally produce under-segmented results (\eg, office1).
 The over-segmentation is often observed in~\cite{Turner2015}, and the
 room shape is too simplified and important details often disappear
