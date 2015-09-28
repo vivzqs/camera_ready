@@ -807,23 +807,15 @@ evidences. More concretely, each wall is discretized into an array of
 pixels, whose size is the same as the voxel (\ie, $0.012$m). The point
 $P_w(p)$ and free-space $F_w(p)$ evidences on the wall are obtained by
 summing $P(v)$ and $F(v)$ along the normal direction with a margin of 5
-voxels, respectively.
-$P_w$ and $F_w$ are calculated for each of the two walls.
+voxels, respectively. $P_w$ and $F_w$ are calculated for each of the two walls.
 %, but we know the correspondence.
-With abuse of notation, $P_w(p)$ and $F_w(p)$ denote the sum over the
-two walls for each pixel $p$.
-
-We want $P_w$ and $F_w$ to be small and large inside the doorway,
-respectively. Therefore, the door shape is obtained by finding the
-rectangle $\Omega$ that minimizes
+With abuse of notation, $P_w(p)$ and $F_w(p)$ denote the sum over the two walls for each pixel $p$. We want $P_w$ and $F_w$ to be small and large inside the doorway, respectively. Therefore, the door shape is obtained by finding the rectangle $\Omega$ that minimizes
 \begin{eqnarray}
  \sum_{p\in\Omega} P_w(p)
   - \lambda_1 \sum_{p\in\Omega} F_w(p) + \lambda_2 \{\mbox{area of\
-  }\Omega\}.
+  }\Omega\},
 \end{eqnarray}
-The last term is to prefer a smaller rectangle when the solution is
-ambiguous due to the lack of evidence. This can be efficiently computed
-by using the integral images.  Given the detected rectangle shape and
+where $\lambda_1$ and $\lambda_2$ are set to $0.01$ and $0.001$. The last term is to prefer a smaller rectangle when the solution is ambiguous due to the lack of evidence. This can be efficiently computed by using the integral images.  Given the detected rectangle shape and
 the pair of walls, the connection type is classified.
 %
 % The results of the room segmentation step often contains errors, 
